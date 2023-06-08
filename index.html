@@ -123,5 +123,31 @@
 
     <div id="resultado"></div>
 
+     <script>
+        function checkConnection() {
+            fetch('/check_connection')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error de conexión con la API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.message === 'API connection successful') {
+                        console.log('Conexión exitosa');
+                    } else {
+                        console.log('Respuesta inválida del servidor');
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error.message);
+                });
+        }
+
+        // Llamar a la función de verificación de conexión
+        checkConnection();
+    </script>
+    
+    
 </body>
 </html>
