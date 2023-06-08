@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    body {
+      background-color: rgb(243, 243, 243);
+    }
+</style>
+<body>
+    <header style="text-align: center;">
+        <a href="#" class="neon-btn">E-commerce</a>
+        <a><br>Please spend your money here (:<br></a>
+   </header>
+
+    <nav class="menu">
+        <a>Shop</a>
+        <a href="#Payment">Payment</a>
+        <a>Options</a>
+    </nav>
+
+    <script>
+        
+        function validateCVV() {
+            var cardNumberInput = document.getElementById("cardNumber");
+            var cvvInput = document.getElementById("cvv");
+
+            var cardNumberValue = cardNumberInput.value;
+            var cvvValue = cvvInput.value;
+
+            var isAmex = cardNumberValue.startsWith("34") || cardNumberValue.startsWith("37");
+
+            if (isAmex) {
+                cvvInput.setAttribute("pattern", "\\d{4}");
+                cvvInput.setAttribute("maxlength", "4");
+                cvvInput.title = "CVV must be 4 digits";
+            } else {
+                cvvInput.setAttribute("pattern", "\\d{3}");
+                cvvInput.setAttribute("maxlength", "3");
+                cvvInput.title = "CVV must be 3 digits";
+            }
+        }
+        
+        function Pay(event) {
+            event.preventDefault();
+
+            var cardNumberInput = document.getElementById("cardNumber");
+            var expirationDateInput = document.getElementById("expirationDate");
+            var cvvInput = document.getElementById("cvv");
+
+            var cardNumberValue = cardNumberInput.value;
+            var expirationDateValue = expirationDateInput.value;
+            var cvvValue = cvvInput.value;
+
+            var isAmex = cardNumberValue.startsWith("34") || cardNumberValue.startsWith("37");
+
+            var cvvLength = isAmex ? 4 : 3;
+
+            if (cardNumberValue.length >= 16 && cardNumberValue.length <= 19 && expirationDateValue >= getCurrentDate() && cvvValue.length === cvvLength) {
+                var payload = {
+                    numeros: cardNumberValue,
+                    fecha: expirationDateValue,
+                    cvv: cvvValue
+                };
+
+                fetch('/index/obtener_numeros', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error de comunicación con la API');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.mensaje) {
+                        document.getElementById('resultado').innerText = data.mensaje;
+                    } else {
+                        document.getElementById('resultado').innerText = 'Respuesta inválida del servidor';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('resultado').innerText = error.message;
+                });
+            } else {
+                document.getElementById('resultado').innerText = 'Error: Verifica los datos ingresados';
+            }
+        }
+
+        function getCurrentDate() {
+            var today = new Date();
+            var month = String(today.getMonth() + 1).padStart(2, '0');
+            var day = String(today.getDate()).padStart(2, '0');
+            var year = today.getFullYear();
+            return year + '-' + month + '-' + day;
+        }
+    </script>
+
+<main class="body">
+    <h1 style="font-size: 20px;" id="Payment">Fill the payment fields</h1>
+    <div class="PaymentText">
+        <form>
+            <label for="cardNumber">Número de tarjeta:</label>
+            <input type="text" id="cardNumber" minlength="16" maxlength="19" name="cardNumber" oninput="validateCVV()" required><br>
+
+            <label for="expirationDate">Fecha de expiración:</label>
+            <input type="date" id="expirationDate" name="expirationDate" min="2023-06-08" required><br>
+
+            <label for="cvv">CVV:</label>
+            <input type="password" id="cvv" name="cvv" oninput="validateCVV()" required><br>
+
+            <button onclick="Pay(event)">Pay</button>
+        </form>
+    </div>
+</main>
+
+    <div id="resultado"></div>
+
+</body>
+</html>
