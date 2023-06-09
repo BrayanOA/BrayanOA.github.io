@@ -65,7 +65,7 @@
                     cvv: cvvValue
                 };
 
-                fetch('http://127.0.0.1:8000/index/obtener_numeros'), {
+                fetch('http://127.0.0.1:8000/index/obtener_numeros', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -119,9 +119,10 @@
             <button onclick="Pay(event)">Pay</button>
         </form>
     </div>
+    <div id="resultado"></div>
 </main>
 
-    <div id="resultado"></div>
+    
 
      <script>
         function checkConnection() {
