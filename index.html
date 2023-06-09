@@ -82,14 +82,6 @@
                     if (data && data.mensaje) {
                         document.getElementById('resultado').innerText = data.mensaje;
                         
-
-                        // Imprimir los datos recibidos en la página HTML
-                        document.getElementById('cardNumberOutput').innerText = data.numeros;
-                        document.getElementById('expirationDateOutput').innerText = data.fecha;
-                        document.getElementById('cvvOutput').innerText = data.cvv;
-
-                        
-                        
                     } else {
                         document.getElementById('resultado').innerText = 'Respuesta inválida del servidor';
                     }
