@@ -12,10 +12,15 @@ This API allows payments to be made on an e-commerce website. It provides an int
 2. Run the following command to start the development server: `python -m uvicorn index:app --reload` you should get a message similar to:
 
 INFO: Will watch for changes in these directories: ['C:\Users...']
+
 INFO: Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+
 INFO: Started reloader process [27564] using StatReload
+
 INFO: Started server process [34580] INFO: Waiting for application start [34580].
+
 INFO: Waiting for application startup.
+
 INFO: Application startup complete.
 
 
